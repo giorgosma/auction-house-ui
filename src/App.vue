@@ -1,5 +1,8 @@
 <template>
-  <div id="app">
+  <div v-if="!loggedIn" id="app">
+    <Login/>
+  </div>
+  <div v-else id="app">
     <el-container>
       <el-header><Header/></el-header>
       <el-container>
@@ -15,13 +18,25 @@
 import Header from './components/Header.vue'
 import Sidebar from './components/Sidebar.vue'
 import Footer from './components/Footer.vue'
+import Login from './components/Login.vue'
 
 export default {
   name: 'app',
   components: {
     Header,
     Sidebar,
-    Footer
+    Footer,
+    Login
+  },
+  data() {
+    return {
+      global: this.$store.state
+    }
+  },
+  computed:{
+    loggedIn(){
+      return this.global.loggedIn
+    }
   }
 }
 </script>

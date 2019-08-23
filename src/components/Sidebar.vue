@@ -6,6 +6,11 @@
 
 <script>
 export default {
-  name: 'Sidebar',
+  name: 'sidebar',
+  data() {
+    return {
+      global: this.$store.state
+    }
+  },
 }
 </script>

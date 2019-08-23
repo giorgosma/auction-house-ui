@@ -6,6 +6,11 @@
 
 <script>
 export default {
-  name: 'Footer',
+  name: 'footer',
+  data() {
+    return {
+      global: this.$store.state
+    }
+  },
 }
 </script>
