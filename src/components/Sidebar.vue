@@ -17,10 +17,9 @@
       </div>
 
       <el-menu
-        default-active="/"
         background-color="#545c64"
         text-color="#fff"
-        active-text-color="#ffd04b"
+        active-text-color="#fff"
         :router="true"
       >
         <el-menu-item index="/">
@@ -49,7 +48,7 @@ export default {
   name: "sidebar",
   data() {
     return {
-      global: this.$store.state
+      global: this.$store.state,
     };
   }
 };

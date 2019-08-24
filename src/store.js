@@ -8,6 +8,13 @@ export default new Vuex.Store({
     apiurl: "http://83.212.109.75:28992/",
 
     loggedIn: false,
+
+    breadcrumbPath: [
+      {
+        path: "/",
+        name: "Home"
+      }
+    ]
   },
   mutations: {
 

@@ -1,10 +1,8 @@
 <template>
   <div>
     <el-breadcrumb separator-class="el-icon-arrow-right" class="breadcrumb-container">
-        <el-breadcrumb-item :to="{ path: '/' }">homepage</el-breadcrumb-item>
-        <el-breadcrumb-item>promotion management</el-breadcrumb-item>
-        <el-breadcrumb-item>promotion list</el-breadcrumb-item>
-        <el-breadcrumb-item>promotion detail</el-breadcrumb-item>
+        <el-breadcrumb-item v-for="(page, index) in global.breadcrumbPath" :key="index" :to="{ path: page.path }">{{page.name}}</el-breadcrumb-item>
+        <el-breadcrumb-item></el-breadcrumb-item>
     </el-breadcrumb>
   </div>
 </template>

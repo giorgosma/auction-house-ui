@@ -10,7 +10,7 @@
           <Breadcrumb />
         </el-row>
         <el-row>
-          <router-view />
+          <router-view/>
         </el-row>
       </el-main>
     </el-container>
@@ -18,20 +18,16 @@
 </template>
 
 <script>
-import Header from "./components/Header.vue";
 import Sidebar from "./components/Sidebar.vue";
-import Footer from "./components/Footer.vue";
 import Login from "./components/Login.vue";
 import Breadcrumb from "./components/Breadcrumb.vue";
 
 export default {
   name: "app",
   components: {
-    Header,
-    Sidebar,
-    Footer,
     Login,
-    Breadcrumb
+    Sidebar,
+    Breadcrumb,
   },
   data() {
     return {

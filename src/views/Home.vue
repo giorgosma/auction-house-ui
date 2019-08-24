@@ -24,6 +24,16 @@ export default {
     return {
       global: this.$store.state
     };
+  },
+  mounted(){
+    this.updateBreadcrumb()
+  },
+  methods: {
+    updateBreadcrumb(){
+      this.global.breadcrumbPath = [
+        { path: "/", name: "Home" }
+      ]
+    }
   }
 };
 </script>
