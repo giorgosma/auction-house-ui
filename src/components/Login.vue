@@ -1,6 +1,6 @@
 <template>
   <div>
-    Login.vue here
+    Login
     <el-input v-model="username" placeholder="Username"></el-input>
     <el-input v-model="password" placeholder="Password"></el-input>
     <el-button @click="handleLogin">Click here to login</el-button>
@@ -36,11 +36,13 @@ export default {
               + "/"
               + this.password
 
+      console.log(url)
       var response = await axios.post(url)
 
       console.log(JSON.stringify(response.data))
 
-      if(response.data == "OK"){
+      if(response.data != "Not OK"){
+        this.global.userInfo = response.data
         this.global.loggedIn = true
       }
       else{

@@ -30,9 +30,7 @@ export default {
   },
   methods: {
     updateBreadcrumb(){
-      this.global.breadcrumbPath = [
-        { path: "/", name: "Home" }
-      ]
+      this.global.breadcrumbPath = [{ path: "/", name: "Home" }]
     }
   }
 };
