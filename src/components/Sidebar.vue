@@ -30,9 +30,9 @@
           <i class="el-icon-menu"></i>
           <span>About</span>
         </el-menu-item>
-        <el-menu-item index="3">
+        <el-menu-item index="/register">
           <i class="el-icon-document"></i>
-          <span>Navigator Three</span>
+          <span>Register New User</span>
         </el-menu-item>
         <el-menu-item index="4">
           <i class="el-icon-setting"></i>

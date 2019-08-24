@@ -3,6 +3,7 @@ import Router from 'vue-router'
 import Home from './views/Home.vue'
 import About from './views/About.vue'
 import NewAuction from './views/NewAuction.vue'
+import Register from './views/Register.vue'
 
 Vue.use(Router)
 
@@ -22,6 +23,11 @@ export default new Router({
       path: '/newAuction',
       name: 'newauction',
       component: NewAuction
+    },
+    {
+      path: '/register',
+      name: 'register',
+      component: Register
     }
   ]
 })
