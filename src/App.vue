@@ -1,60 +1,59 @@
 <template>
-  <div v-if="!loggedIn" id="app">
-    <Login/>
+  <div v-if="!global.loggedIn" id="app">
+    <Login />
   </div>
   <div v-else id="app">
     <el-container>
-      <el-header><Header/></el-header>
-      <el-container>
-        <el-aside><Sidebar/></el-aside>
-        <el-main><router-view/></el-main>
-      </el-container>
-      <el-footer><Footer/></el-footer>
+      <Sidebar />
+      <el-main>
+        <el-row>
+          <Breadcrumb />
+        </el-row>
+        <el-row>
+          <router-view />
+        </el-row>
+      </el-main>
     </el-container>
   </div>
 </template>
 
 <script>
-import Header from './components/Header.vue'
-import Sidebar from './components/Sidebar.vue'
-import Footer from './components/Footer.vue'
-import Login from './components/Login.vue'
+import Header from "./components/Header.vue";
+import Sidebar from "./components/Sidebar.vue";
+import Footer from "./components/Footer.vue";
+import Login from "./components/Login.vue";
+import Breadcrumb from "./components/Breadcrumb.vue";
 
 export default {
-  name: 'app',
+  name: "app",
   components: {
     Header,
     Sidebar,
     Footer,
-    Login
+    Login,
+    Breadcrumb
   },
   data() {
     return {
       global: this.$store.state
-    }
-  },
-  computed:{
-    loggedIn(){
-      return this.global.loggedIn
-    }
+    };
   }
-}
+};
 </script>
 
 <style>
 #app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
+  font-family: "Avenir", Helvetica, Arial, sans-serif;
   color: #2c3e50;
 }
-.el-header, .el-footer {
-  background-color: #B3C0D1;
+.container {
+  max-width: 1200px;
+  margin: auto;
 }
-
-.el-aside {
-  background-color: #D3DCE6;
-}
-
 .el-main {
-  background-color: #E9EEF3;
+  background: #eef1f4;
+}
+.el-row {
+  margin-bottom: 20px;
 }
 </style>
