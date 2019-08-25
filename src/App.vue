@@ -1,19 +1,25 @@
 <template>
-  <div v-if="!global.loggedIn" id="app">
-    <Login />
-  </div>
-  <div v-else id="app">
+  <div id="app">
     <el-container>
       <Sidebar />
       <el-main>
         <el-row>
-          <Breadcrumb />
+          <el-col :span="12">
+            <Breadcrumb />
+          </el-col>
+          <el-col :offset="4" :span="8">
+            <LoginRegister v-if="!global.loggedIn"/>
+            <UserInfo v-else/>
+          </el-col>
         </el-row>
         <el-row>
           <router-view/>
         </el-row>
       </el-main>
     </el-container>
+
+    <p v-if="global.loggedIn"> logged in </p>
+    <p v-else> logged out </p>
   </div>
 </template>
 
@@ -21,6 +27,8 @@
 import Sidebar from "./components/Sidebar.vue";
 import Login from "./components/Login.vue";
 import Breadcrumb from "./components/Breadcrumb.vue";
+import LoginRegister from "./components/LoginRegister.vue";
+import UserInfo from "./components/UserInfo.vue";
 
 export default {
   name: "app",
@@ -28,6 +36,8 @@ export default {
     Login,
     Sidebar,
     Breadcrumb,
+    LoginRegister,
+    UserInfo,
   },
   data() {
     return {
