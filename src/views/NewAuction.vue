@@ -66,6 +66,12 @@ export default {
   },
   mounted() {
     this.updateBreadcrumb();
+    console.log("Categories data:")
+    // for(let i in this.multipleSelection) {
+    //     console.log(JSON.stringify(this.global.categories[i]));
+    //   }
+    console.log(JSON.stringify(this.global.categories))
+    // console.log(this.global.categories)
   },
   methods: {
     updateBreadcrumb() {
