@@ -34,9 +34,9 @@
           <i class="el-icon-document"></i>
           <span>Register New User</span>
         </el-menu-item>
-        <el-menu-item index="4">
+        <el-menu-item index="/confirmUser">
           <i class="el-icon-setting"></i>
-          <span>Navigator Four</span>
+          <span>Confirm User</span>
         </el-menu-item>
       </el-menu>
     </el-aside>

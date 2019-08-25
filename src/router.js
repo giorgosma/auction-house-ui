@@ -4,6 +4,7 @@ import Home from './views/Home.vue'
 import About from './views/About.vue'
 import NewAuction from './views/NewAuction.vue'
 import Register from './views/Register.vue'
+import ConfirmUser from './views/ConfirmUser.vue'
 
 Vue.use(Router)
 
@@ -28,6 +29,11 @@ export default new Router({
       path: '/register',
       name: 'register',
       component: Register
+    },
+    {
+      path: '/confirmUser',
+      name: 'confirmUser',
+      component: ConfirmUser
     }
   ]
 })
