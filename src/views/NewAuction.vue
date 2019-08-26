@@ -14,6 +14,23 @@
               v-model="item.description"
             ></el-input>
           </el-form-item>
+          <el-form-item label="Categories" label-width="120px">
+            <el-select
+              v-model="value"
+              multiple
+              filterable
+              allow-create
+              default-first-option
+              placeholder="Choose Item Categories"
+            >
+              <el-option
+                v-for="item in options"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+              ></el-option>
+            </el-select>
+          </el-form-item>
           <el-form-item label="Starting Price" label-width="120px">
             <el-input-number v-model="auction.starting_bid" :precision="2" :step="0.01" :min="0"></el-input-number>
           </el-form-item>
@@ -60,18 +77,28 @@ export default {
       auction: {
         starting_bid: 0,
         buyout_price: 0,
-        end_time: null,
-      }
+        end_time: null
+      },
+
+      item_category: {
+        item_id: 0,
+        category_id: 0
+      },
+
+      options: [
+        // {
+        //   value: null,
+        //   label: null
+        // },
+      ],
+      value: []
     };
   },
   mounted() {
     this.updateBreadcrumb();
-    console.log("Categories data:")
-    // for(let i in this.multipleSelection) {
-    //     console.log(JSON.stringify(this.global.categories[i]));
-    //   }
-    console.log(JSON.stringify(this.global.categories))
-    // console.log(this.global.categories)
+    // console.log("Categories data:");
+    // console.log(JSON.stringify(this.global.categories));
+    this.fillUpOptions();
   },
   methods: {
     updateBreadcrumb() {
@@ -80,36 +107,54 @@ export default {
         { path: "/newAuction", name: "New Auction" }
       ];
     },
-    async handleNewAuction(){
-      console.log("This is handle new auction")
-      console.log(JSON.stringify(this.item))
-      console.log(JSON.stringify(this.auction))
+    async handleNewAuction() {
+      console.log("This is handle new auction");
+      console.log(JSON.stringify(this.item));
+      console.log(JSON.stringify(this.auction));
 
-      var url = this.global.apiurl
-              + "items/newItem"
-      var body = this.item
-      var config = { headers: { 'Content-Type': 'application/json' } }
+      var url = this.global.apiurl + "items/newItem";
+      var body = this.item;
+      var config = { headers: { "Content-Type": "application/json" } };
 
-      var response = await axios.post(url, body, config)
+      var response = await axios.post(url, body, config);
 
-      console.log(response.data)
+      console.log(response.data);
+      this.item_category.item_id = response.data.id;
+      this.auction.item_id = response.data.id;
+      this.auction.seller_id = this.global.userInfo.id;
 
-      this.auction.item_id = response.data.id
-      this.auction.seller_id = this.global.userInfo.id
-
-      if(this.auction.buyout_price == 0){
-        delete this.auction.buyout_price
+      if (this.auction.buyout_price == 0) {
+        delete this.auction.buyout_price;
       }
 
-      console.log(JSON.stringify(this.auction))
+      console.log(JSON.stringify(this.auction));
 
-      url = this.global.apiurl
-            + "auctions/newAuction"
-      body = this.auction
+      url = this.global.apiurl + "auctions/newAuction";
+      body = this.auction;
 
-      response = await axios.post(url, body, config)
+      response = await axios.post(url, body, config);
 
-      console.log(response.data)
+      console.log(response.data);
+
+      console.log("categories: ");
+      for (let i in this.value) {
+        console.log(this.value[i]);
+        this.item_category.category_id = this.value[i];
+        url = this.global.apiurl + "item_categories/itemCategories";
+        body = this.item_category;
+
+        response = await axios.post(url, body, config);
+
+        console.log(response.data);
+      }
+    },
+    fillUpOptions() {
+      for (let i in this.global.categories) {
+        this.options.push({
+          value: this.global.categories[i].id,
+          label: this.global.categories[i].name
+        });
+      }
     }
   }
 };

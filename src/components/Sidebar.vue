@@ -38,6 +38,10 @@
           <i class="el-icon-setting"></i>
           <span>Confirm User</span>
         </el-menu-item>
+        <el-menu-item index="/newAuction">
+          <i class="el-icon-setting"></i>
+          <span>New Auction</span>
+        </el-menu-item>
       </el-menu>
     </el-aside>
   </div>
