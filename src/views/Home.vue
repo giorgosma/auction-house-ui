@@ -38,7 +38,7 @@
                   <span>Starting Bid: {{ auctions[index].starting_bid }}</span>
                 </div>
                 <div style="text-align:center;">
-                  <el-button type="text" class="button">Launch Auction</el-button>
+                  <router-link :to="'/auctions/' + auctions[index].id">View Auction</router-link>
                 </div>
               </div>
             </div>
@@ -86,7 +86,7 @@ export default {
       for (let i in this.auctions) {
         this.auctions[i].visible = true
       }
-
+      this.global.auctions = this.auctions
       // var obj = response.data
       // console.log("theID: " + this.auctions[34].id)
     },

@@ -6,6 +6,7 @@ import NewAuction from './views/NewAuction.vue'
 import Register from './views/Register.vue'
 import Profile from './views/Profile.vue'
 import ConfirmUser from './views/ConfirmUser.vue'
+import Auctions from './views/Auctions.vue'
 
 Vue.use(Router)
 
@@ -40,6 +41,11 @@ export default new Router({
       path: '/confirmUser',
       name: 'confirmUser',
       component: ConfirmUser
+    },
+    {
+      path: '/auctions/:id',
+      name: 'auctions',
+      component: Auctions
     }
   ]
 })
