@@ -1,11 +1,5 @@
 <template>
   <div>
-<<<<<<< HEAD
-    AUCTION_ID
-    {{this.auction_id}}
-    ROUTE
-    {{this.$route.params.id}}
-=======
     <el-row>
       <!-- {{ this.auction_obj.id }}
       {{ this.auction_obj.item.id }}
@@ -48,38 +42,10 @@
         </el-col>
       </el-card>
     </el-row>
->>>>>>> 2dacce440f03e1e226cd25e22c5c7e748149a915
   </div>
 </template>
 
 <script>
-<<<<<<< HEAD
-import axios from "axios";
-
-export default {
-  name: 'auctions',
-  data() {
-    return {
-      global: this.$store.state,
-      auction_id: null
-    }
-  },
-  watch: {
-    '$route.params.id': "updateData"
-  },
-  mounted() {
-      this.updateData()
-  },
-  methods: {
-      updateData(){
-          this.auction_id = this.$route.params.id
-      }
-  }
-}
-</script>
-
-<style>
-=======
 // import axios from "axios";
 
 export default {
@@ -301,5 +267,4 @@ export default {
 .bg-white {
   background: #e0e0e0;
 }
->>>>>>> 2dacce440f03e1e226cd25e22c5c7e748149a915
 </style>
