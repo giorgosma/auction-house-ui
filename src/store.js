@@ -9,6 +9,9 @@ export default new Vuex.Store({
     loggedIn: false,
     breadcrumbPath: [{ path: "/", name: "Home" }],
     userInfo: {},
+    categories: [],
+    auctions: [],
+    token: "",
   },
   mutations: {
 

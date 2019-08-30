@@ -43,6 +43,21 @@ export default {
     return {
       global: this.$store.state
     };
+  },
+  mounted() {
+    this.makeCategories();
+  },
+  methods: {
+    async makeCategories(){
+      var url = this.global.apiurl
+              + "categories/all"
+
+      var response = await axios.get(url)
+      //console.log(JSON.stringify(response.data))
+
+      this.global.categories = response.data
+      //console.log(JSON.stringify(this.global.categories))
+    }
   }
 };
 </script>
