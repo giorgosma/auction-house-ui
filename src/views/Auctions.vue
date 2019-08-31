@@ -22,7 +22,7 @@
         <el-col class="column" style="background-color:#f5fae9">
           <h3 style="text-align:left;">In Auction until: {{ this.auction_obj.end_time }}</h3>
         </el-col>
-        <el-col class="column" style="background-color:#e0e0e0">
+        <el-col v-if="myAuction" class="column" style="background-color:#e0e0e0">
           <el-form>
             <el-form-item label="Starting Price" label-width="100px">
               <el-input-number
@@ -31,14 +31,48 @@
                 :step="0.01"
                 :min="this.starting_bid"
               ></el-input-number>
-              <el-button v-if="this.auction_obj.active" type="primary" @click="makeNewBid" enabled >Confirm Bid</el-button>
+              <el-button
+                v-if="this.auction_obj.active"
+                type="primary"
+                @click="makeNewBid"
+                enabled
+              >Confirm Bid</el-button>
               <el-button v-else type="primary" @click="makeNewBid" disabled>Confirm Bid</el-button>
             </el-form-item>
             <el-form-item label="Buy Now:" label-width="100px">
-              <el-button v-if="this.auction_obj.active" type="danger" @click="buyOutNow" enabled>Checkout</el-button>
+              <el-button
+                v-if="this.auction_obj.active"
+                type="danger"
+                @click="buyOutNow"
+                enabled
+              >Checkout</el-button>
               <el-button v-else type="danger" @click="buyOutNow" disabled>Checkout</el-button>
             </el-form-item>
           </el-form>
+        </el-col>
+        <el-col v-else class="column" style="background-color:#e0e0e0">
+          <el-collapse>
+            <el-collapse-item title="Edit Starting Bid">
+              <el-input-number
+                v-model="bid.amount"
+                :precision="2"
+                :step="0.01"
+                :min="this.starting_bid"
+              ></el-input-number>
+              <el-button
+                v-if="testEdit"
+                type="primary"
+                @click="changeStartingBid"
+                enabled
+              >Confirm new Starting Bid</el-button>
+              <el-button
+                v-else
+                type="primary"
+                @click="changeStartingBid"
+                disabled
+              >Confirm new Starting Bid</el-button>
+            </el-collapse-item>
+          </el-collapse>
         </el-col>
       </el-card>
     </el-row>
@@ -83,27 +117,17 @@ export default {
     this.updateData();
     this.updateBreadcrumb();
     this.loadAuction();
-    // this.minBid();
   },
-  // computed: {
-  //   Auction: function() {
-  //     for (let i in this.global.auctions) {
-  //       if (this.global.auctions[i].id === this.auction_id) {
-  //         this.auction_obj = this.global.auctions[i];
-  //         return this.auction_obj
-  //       }
-  //     }
-  //   },
-  //   AuctionId: function() {
-  //     return this.auction_obj.id
-  //   },
-  //   // item(){
-  //   //   return this.auction.item
-  //   // },
-  //   Categories: function(){
-  //     return this.categories[0].name
-  //   }
-  // },
+  computed: {
+    myAuction: function() {
+      if (this.auction_obj.seller_id == this.global.userInfo.id) return false;
+      else return true;
+    },
+    testEdit: function() {
+      if (this.auction_obj.highest_bid_id == null) return true;
+      else false;
+    }
+  },
   methods: {
     updateData() {
       this.auction_id = this.$route.params.id;
@@ -133,13 +157,6 @@ export default {
       console.log(JSON.stringify(response.data));
 
       this.auction_obj = response.data[0];
-      // console.log("SELLER " + response.data[0])
-      //this.auction_obj.item = response.data[0].item
-      // console.log(this.item.name)
-      // for (let j in response.data[0].item.categories) {
-      //   this.auction_obj.item.categories[j] = response.data[0].item.categories[j];
-      //   console.log(this.categories[j].name)
-      // }
       this.minBid();
     },
     async minBid() {
@@ -153,9 +170,7 @@ export default {
         var response = await axios.get(url);
 
         console.log(JSON.stringify(response.data));
-        // this.newBid = response.data;
         this.starting_bid = response.data[0].amount;
-        // console.log("Bid " + this.starting_bid);
       }
     },
     calcTime(offset) {
@@ -173,20 +188,6 @@ export default {
       console.log(this.bid.auction_id);
       console.log(this.bid.amount);
       this.createNewBid();
-
-      // url = this.global.apiurl
-      //     + "auctions/newBid/"
-      //     + this.auction_obj.id
-      //     +"/"
-      //     + this.newBid.id;
-
-      // this.auction_obj.highest_bid_id = this.newBid.id
-
-      // // console.log(url);
-      // response = await axios.patch(url);
-
-      // console.log(JSON.stringify(response.data));
-      // this.minBid();
     },
     async createNewBid() {
       var url = this.global.apiurl + "bids/newBid";
@@ -208,25 +209,39 @@ export default {
 
       this.auction_obj.highest_bid_id = this.newBid.id;
 
-      // console.log(url);
       response = await axios.patch(url);
 
       console.log(JSON.stringify(response.data));
       this.minBid();
     },
     buyOutNow() {
-      this.disableAuction()
+      this.disableAuction();
     },
     async disableAuction() {
       var url =
-        this.global.apiurl +
-        "auctions/disableAuction/" +
-        this.auction_obj.id 
+        this.global.apiurl + "auctions/disableAuction/" + this.auction_obj.id;
 
-      // console.log(url);
       var response = await axios.patch(url);
 
       console.log(JSON.stringify(response.data));
+    },
+    changeStartingBid() {
+      console.log(this.bid.amount);
+      this.updateStartingBid()
+    },
+    async updateStartingBid() {
+      var url =
+        this.global.apiurl +
+        "auctions/updateStartingBid/" +
+        this.auction_obj.id +
+        "/" +
+        this.bid.amount;
+
+      this.auction_obj.starting_bid = this.bid.amount;
+
+      var response = await axios.patch(url);
+      console.log(JSON.stringify(response.data));
+      this.minBid();
     }
   }
 };
