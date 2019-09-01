@@ -21,6 +21,7 @@
         </el-col>
         <el-col class="column" style="background-color:#f5fae9">
           <h3 style="text-align:left;">In Auction until: {{ this.auction_obj.end_time }}</h3>
+          <h3 style="text-align:left;">Time remaining: {{ this.auction_obj.remaining }}</h3>
         </el-col>
         <el-col v-if="myAuction" class="column" style="background-color:#e0e0e0">
           <el-form>
@@ -157,6 +158,7 @@ export default {
       console.log(JSON.stringify(response.data));
 
       this.auction_obj = response.data[0];
+      this.auction_obj.remaining = this.getRemainingTime(this.auction_obj.end_time)
       this.minBid();
     },
     async minBid() {
@@ -242,7 +244,22 @@ export default {
       var response = await axios.patch(url);
       console.log(JSON.stringify(response.data));
       this.minBid();
-    }
+    },
+    getRemainingTime(end_time){
+      var seconds = Math.abs(new Date(end_time) - this.calcTime(6))/1000
+
+      var sec_num = parseInt(seconds)
+      var days    = Math.floor(sec_num / 86400)
+      var hours   = Math.floor((sec_num - (days * 86400)) / 3600);
+      var minutes = Math.floor((sec_num - (days * 86400) - (hours * 3600)) / 60);
+      var seconds = sec_num - (days * 86400) - (hours * 3600) - (minutes * 60);
+
+      if (days    < 10) {days    = "0"+days;}
+      if (hours   < 10) {hours   = "0"+hours;}
+      if (minutes < 10) {minutes = "0"+minutes;}
+      if (seconds < 10) {seconds = "0"+seconds;}
+      return days+'d '+hours+'h '+minutes+'m';
+    },
   }
 };
 </script>
