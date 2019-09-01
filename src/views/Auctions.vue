@@ -135,7 +135,7 @@ export default {
     updateBreadcrumb() {
       this.global.breadcrumbPath = [
         { path: "/", name: "Home" },
-        { path: "/Auctions", name: "Auctions/" + this.auction_id }
+        { path: "/auctions/" + this.auction_id, name: "Auctions/" + this.auction_id }
       ];
     },
     findAuctionFromGlobal() {
