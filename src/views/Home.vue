@@ -32,7 +32,7 @@
               <div class="bottom clearfix">
                 <div style="text-align:left; padding:2px" End Time>
                   End Time:
-                  <time class="time">{{ auctions[index].end_time }}</time>
+                  <time class="time">{{ auctions[index].remaining }}</time>
                 </div>
                 <div style="text-align:left; padding:2px">
                   <span>Starting Bid: {{ auctions[index].starting_bid }}</span>
@@ -75,6 +75,19 @@ export default {
     updateBreadcrumb() {
       this.global.breadcrumbPath = [{ path: "/", name: "Home" }];
     },
+    getRemainingTime(seconds){
+      var sec_num = parseInt(seconds)
+      var days    = Math.floor(sec_num / 86400)
+      var hours   = Math.floor((sec_num - (days * 86400)) / 3600);
+      var minutes = Math.floor((sec_num - (days * 86400) - (hours * 3600)) / 60);
+      var seconds = sec_num - (days * 86400) - (hours * 3600) - (minutes * 60);
+
+      if (days    < 10) {days    = "0"+days;}
+      if (hours   < 10) {hours   = "0"+hours;}
+      if (minutes < 10) {minutes = "0"+minutes;}
+      if (seconds < 10) {seconds = "0"+seconds;}
+      return days+'d '+hours+'h '+minutes+'m';
+    },
     async loadAllAuctions() {
       var url = this.global.apiurl + "auctions/loadAuction";
 
@@ -85,6 +98,7 @@ export default {
       this.auctions = response.data;
       for (let i in this.auctions) {
         this.auctions[i].visible = true
+        this.auctions[i].remaining = this.getRemainingTime(Math.abs(new Date(this.auctions[i].end_time) - new Date())/1000)
       }
       this.global.auctions = this.auctions
       // var obj = response.data
