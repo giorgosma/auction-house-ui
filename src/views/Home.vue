@@ -136,7 +136,8 @@ export default {
       }
     },
     getRemainingTime(end_time){
-      var seconds = Math.abs(new Date(end_time) - this.calcTime(6))/1000
+      var seconds = (new Date(end_time) - this.calcTime(6))/1000
+      if(seconds < 0) return "Expired"
 
       var sec_num = parseInt(seconds)
       var days    = Math.floor(sec_num / 86400)
