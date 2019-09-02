@@ -19,9 +19,21 @@
             </el-collapse-item>
           </el-collapse>
         </el-col>
+        <el-col class="column" style="background-color:#daf1c3">
+          <h3 style="text-align:left;">Seller: {{ this.auction_obj.user.username }}</h3>
+          <h3 v-if="this.auction_obj.user.rating" style="text-align:left;">Rating: {{ this.auction_obj.user.rating }}</h3>
+        </el-col>
         <el-col class="column" style="background-color:#f5fae9">
           <h3 style="text-align:left;">In Auction until: {{ this.auction_obj.end_time }}</h3>
           <h3 style="text-align:left;">Time remaining: {{ this.auction_obj.remaining }}</h3>
+        </el-col>
+        <el-col class="column" style="background-color:#e3ecc3">
+          <h3 style="text-align:left;">Starting Bid: {{ this.auction_obj.starting_bid }}</h3>
+          <h3 v-if="this.auction_obj.highest_bid_id" style="text-align:left;">Highest Bid: {{ this.auction_obj.bid.amount }}</h3>
+          <h3 v-if="this.auction_obj.bid_count" style="text-align:left;">Number of Bids: {{ this.auction_obj.bid_count }}</h3>
+        </el-col>
+        <el-col class="column" style="background-color:#f0d955">
+          <h3 v-if="this.auction_obj.buyout_price" style="text-align:left;">Buy Out Price: {{ this.auction_obj.buyout_price }}</h3>
         </el-col>
         <el-col v-if="myAuction" class="column" style="background-color:#e0e0e0">
           <el-form>
@@ -93,7 +105,7 @@ export default {
         item: {
           categories: [0]
         },
-        seller: {}
+        user: ""
       },
 
       bid: {
@@ -132,6 +144,7 @@ export default {
   methods: {
     updateData() {
       this.auction_id = this.$route.params.id;
+      this.bid.amount = this.starting_bid
     },
     updateBreadcrumb() {
       this.global.breadcrumbPath = [
@@ -201,13 +214,16 @@ export default {
       console.log(JSON.stringify(response.data));
       this.newBid = response.data;
       console.log("New Bid " + this.newBid.id);
+      this.auction_obj.bid_count++;
 
       url =
         this.global.apiurl +
         "auctions/newBid/" +
         this.auction_obj.id +
         "/" +
-        this.newBid.id;
+        this.newBid.id +
+        "/" +
+        this.auction_obj.bid_count;
 
       this.auction_obj.highest_bid_id = this.newBid.id;
 

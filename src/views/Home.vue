@@ -37,6 +37,12 @@
                 <div style="text-align:left; padding:2px">
                   <span>Starting Bid: {{ auctions[index].starting_bid }}</span>
                 </div>
+                <div v-if="auctions[index].buyout_price" style="text-align:left; padding:2px">
+                  <span>BuyOut Price: {{ auctions[index].buyout_price }}</span>
+                </div>
+                <div v-if="auctions[index].highest_bid_id" style="text-align:left; padding:2px">
+                  <span>Highest Bid: {{ auctions[index].bid.amount }}</span>
+                </div>
                 <div style="text-align:center;">
                   <router-link :to="'/auctions/' + auctions[index].id">View Auction</router-link>
                 </div>
@@ -60,11 +66,13 @@ export default {
       auctions: [],
       auctionNumber: 0,
       options: [],
-      value: []
+      value: [],
+
     };
   },
   watch: {
-    value: "loadViaCategory"
+    value: "loadViaCategory",
+    "global.loggedIn": "loadAllAuctions"
   },
   mounted() {
     this.updateBreadcrumb();
@@ -84,12 +92,22 @@ export default {
       this.auctionNumber = response.data.length;
       this.auctions = response.data;
       for (let i in this.auctions) {
-        this.auctions[i].visible = true
         this.auctions[i].remaining = this.getRemainingTime(this.auctions[i].end_time)
+        if (this.auctions[i].remaining == "Expired")
+          this.auctions[i].visible = false
+        else {
+          if (this.global.loggedIn) {
+            if (this.global.userInfo.id == this.auctions[i].seller_id){
+              this.auctions[i].visible = false
+            }
+            else
+              this.auctions[i].visible = true
+          }         
+          else
+            this.auctions[i].visible = true
+        }
       }
       this.global.auctions = this.auctions
-      // var obj = response.data
-      // console.log("theID: " + this.auctions[34].id)
     },
     loadViaCategory() {
       console.log("Changed value!")
