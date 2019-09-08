@@ -8,6 +8,7 @@ import Profile from './views/Profile.vue'
 import ConfirmUser from './views/ConfirmUser.vue'
 import Auctions from './views/Auctions.vue'
 import MyAuctions from './views/MyAuctions.vue'
+import MyMessages from './views/MyMessages.vue'
 
 Vue.use(Router)
 
@@ -53,6 +54,12 @@ export default new Router({
       path: '/myAuctions',
       name: 'myAuctions',
       component: MyAuctions
+    }
+    ,
+    {
+      path: '/myMessages',
+      name: 'myMessages',
+      component: MyMessages
     }
   ]
 })

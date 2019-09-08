@@ -46,6 +46,10 @@
           <i class="el-icon-setting"></i>
           <span>My Auctions</span>
         </el-menu-item>
+        <el-menu-item index="/myMessages">
+          <i class="el-icon-setting"></i>
+          <span>My Messages</span>
+        </el-menu-item>
       </el-menu>
     </el-aside>
   </div>
