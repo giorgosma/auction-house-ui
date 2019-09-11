@@ -19,21 +19,61 @@
     </el-row>
     <el-row v-if="this.seeInbox == true">
       <el-card>
-        <el-row v-for="index in this.InMessages" v-bind:key="index.id">
-          <el-col>
-            <el-button @click="openInMessage(index)" v-if="index.receiver_read" type="default" >{{index.user.username}} - {{index.auction.item.name }}</el-button>
-            <el-button @click="openInMessage(index)" v-else type="info" >{{index.user.username}} - {{index.auction.item.name }}</el-button>
-          </el-col>
-        </el-row>
+        <el-table
+          :data="InMessages">
+          <el-table-column
+            :min-width="25"
+            label="Sender"
+            prop="user.username">
+          </el-table-column>
+          <el-table-column
+            :min-width="25"
+            label="Auction"
+            prop="auction.item.name">
+          </el-table-column>
+          <el-table-column
+            :min-width="25">
+            <template slot-scope="scope">
+              <el-button @click="openInMessage(scope.row)" v-if="scope.row.receiver_read" type="default" >Read Message</el-button>
+              <el-button @click="openInMessage(scope.row)" v-else type="info" >Read Message</el-button>
+            </template>
+          </el-table-column>
+          <el-table-column
+            :min-width="25">
+            <template slot-scope="scope">
+              <el-button @click="deleteMessage(scope.row)">Delete Message</el-button>
+            </template>
+          </el-table-column>
+        </el-table>
       </el-card>
     </el-row>
     <el-row v-else-if="this.seeOutbox == true">
       <el-card>
-        <el-row v-for="index in this.OutMessages" v-bind:key="index.id">
-          <el-col>
-            <el-button @click="openOutMessage(index)" type="default" >{{index.user.username}} - {{index.auction.item.name }}</el-button>
-          </el-col>
-        </el-row>
+        <el-table
+          :data="OutMessages">
+          <el-table-column
+            :min-width="25"
+            label="Receiver"
+            prop="user.username">
+          </el-table-column>
+          <el-table-column
+            :min-width="25"
+            label="Auction"
+            prop="auction.item.name">
+          </el-table-column>
+          <el-table-column
+            :min-width="25">
+            <template slot-scope="scope">
+              <el-button @click="openOutMessage(scope.row)" type="default" >Read Message</el-button>
+            </template>
+          </el-table-column>
+          <el-table-column
+            :min-width="25">
+            <template slot-scope="scope">
+              <el-button @click="deleteMessage(scope.row)">Delete Message</el-button>
+            </template>
+          </el-table-column>
+        </el-table>
       </el-card>
     </el-row>
     <el-row v-else-if="this.seenewMessage == true">
@@ -261,6 +301,29 @@ export default {
       var utc = d.getTime() + d.getTimezoneOffset() * 60000;
       return new Date(utc + 3600000 * offset);
     },
+    deleteMessage(row){
+      console.log("delete message clicked")
+      this.$confirm('Are you sure you want to delete this message?', 'Warning', {
+          confirmButtonText: 'OK',
+          cancelButtonText: 'Cancel',
+          type: 'warning'
+        }).then( async () => {
+          console.log("Deleting: " + JSON.stringify(row))
+          var response = {}
+          var url = this.global.apiurl + "messages/deleteMessage/" + row.id;
+          try{
+            response = await axios.post(url)
+          } catch(error){
+            console.log(error);
+            console.log(response.error);
+            return
+          }
+          this.initMessageBox();
+          this.checkingNewMessages();
+          this.loadUserCompletedAuctions();
+        })
+    },
+
   }
 };
 </script>
