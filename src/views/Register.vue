@@ -56,6 +56,8 @@
 </template>
 
 <script>
+import md5 from "md5";
+
 export default {
   data() {
     return {
@@ -115,7 +117,8 @@ export default {
     async handleNewRegistration() {
       console.log("This is handle new Registration");
       console.log(JSON.stringify(this.user));
-
+      this.user.password = md5(this.user.password);
+      console.log("MD5 password: " + this.user.password)
       var url = this.global.apiurl + "users/register";
       var body = this.user;
       var config = { headers: { "Content-Type": "application/json" } };

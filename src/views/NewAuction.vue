@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if="this.global.loggedIn">
     <el-row>
       <el-col class="column" :span="12">
         <el-form>
@@ -56,9 +56,13 @@
 
     <el-row>
       <el-col :offset="9">
-        <el-button type="primary" @click="handleNewAuction">Create Auction</el-button>
+        <el-button v-if="this.global.userInfo.is_confirmed" type="primary" @click="handleNewAuction">Create Auction</el-button>
+        <el-button v-else disabled type="primary" @click="handleNewAuction">Create Auction</el-button>
       </el-col>
     </el-row>
+  </div>
+  <div v-else>
+    You must be Logged In to make New Auctions
   </div>
 </template>
 

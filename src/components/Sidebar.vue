@@ -34,19 +34,19 @@
           <i class="el-icon-document"></i>
           <span>Register New User</span>
         </el-menu-item>
-        <el-menu-item index="/confirmUser">
+        <el-menu-item v-if="this.global.loggedIn && this.global.userInfo.username == 'onouf123'" index="/confirmUser">
           <i class="el-icon-setting"></i>
           <span>Confirm User</span>
         </el-menu-item>
-        <el-menu-item index="/newAuction">
+        <el-menu-item v-if="this.global.loggedIn" index="/newAuction">
           <i class="el-icon-setting"></i>
           <span>New Auction</span>
         </el-menu-item>
-        <el-menu-item index="/myAuctions">
+        <el-menu-item v-if="this.global.loggedIn" index="/myAuctions">
           <i class="el-icon-setting"></i>
           <span>My Auctions</span>
         </el-menu-item>
-        <el-menu-item index="/myMessages">
+        <el-menu-item v-if="this.global.loggedIn" index="/myMessages">
           <i class="el-icon-setting"></i>
           <span>My Messages</span>
         </el-menu-item>

@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if="this.global.loggedIn">
     <el-row>
       Choose Categories
       <el-select
@@ -47,6 +47,9 @@
         </el-row>
       </el-col>
     </el-row>
+  </div>
+  <div v-else>
+    You must be Logged In to view My Auctions
   </div>
 </template>
 

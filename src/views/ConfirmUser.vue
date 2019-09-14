@@ -1,5 +1,5 @@
 <template>
-  <el-row>
+  <el-row v-if="this.global.loggedIn && this.global.userInfo.username == 'onouf123'">
     <el-table
       ref="multipleTable"
       :data="tableData"
@@ -34,6 +34,9 @@
       <!-- <el-button @click="toggleSelection()">Clear selection</el-button> -->
     </div>
   </el-row>
+  <el-row v-else>
+    <h1>FORBIDDEN</h1>
+  </el-row>
 </template>
 
 <script>
@@ -65,13 +68,14 @@ export default {
       var response = await axios.get(url);
 
       console.log(JSON.stringify(response.data));
-      this.tableData = response.data
+      this.tableData = response.data;
     },
     async toggleSelection() {
-      for(let i in this.multipleSelection) {
-        var url = this.global.apiurl + "users/confirmUser/"
-              + this.multipleSelection[i].id
-
+      for (let i in this.multipleSelection) {
+        var url =
+          this.global.apiurl +
+          "users/confirmUser/" +
+          this.multipleSelection[i].id;
 
         console.log(url);
         var response = await axios.patch(url);
@@ -82,7 +86,7 @@ export default {
     },
     handleSelectionChange(val) {
       this.multipleSelection = val;
-      console.log(JSON.stringify(val))
+      console.log(JSON.stringify(val));
     }
   }
 };

@@ -18,8 +18,8 @@
       </el-main>
     </el-container>
 
-    <p v-if="global.loggedIn"> logged in </p>
-    <p v-else> logged out </p>
+    <!-- <p v-if="global.loggedIn"> logged in </p> -->
+    <!-- <p v-else> logged out </p> -->
   </div>
 </template>
 

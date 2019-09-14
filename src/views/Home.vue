@@ -1,5 +1,10 @@
 <template>
-  <div>
+  <div v-if="this.global.loggedIn && this.global.userInfo.is_confirmed == 0">
+    <el-row>
+      Your Confirmation is pending!
+    </el-row>
+  </div>
+  <div v-else>
     <el-row>
       <el-col :span="2">
         <el-select v-model="select" placeholder="Select">

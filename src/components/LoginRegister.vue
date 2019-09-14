@@ -1,7 +1,7 @@
 <template>
   <div>
     <el-col :span="10"><el-input v-model="username" placeholder="Username" size="small"></el-input></el-col>
-    <el-col :span="10"><el-input v-model="password" placeholder="Password" size="small"></el-input></el-col>
+    <el-col :span="10"><el-input v-model="password" placeholder="Password" size="small" show-password></el-input></el-col>
     <el-col :span="4"><el-button size="small" @click="handleLogin">Login</el-button></el-col>
     <el-col :span="14" v-if="showWarning">Invalid credentials</el-col>
     <el-col :span="10" v-if="showWarning"><router-link to="/register">Click here to register</router-link></el-col>
@@ -11,6 +11,7 @@
 
 <script>
 import axios from "axios";
+import md5 from "md5";
 
 export default {
   name: 'loginregister',
@@ -35,7 +36,7 @@ export default {
               + "users/login/"
               + this.username
               + "/"
-              + this.password
+              + md5(this.password);
 
       console.log(url)
       var response = await axios.post(url)

@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if="this.global.loggedIn">
     <el-row>
       <el-badge v-if="this.inbox == '0'" :value="this.inbox" class="item" hidden>
         <el-button @click="openInbox" size="large">Inbox</el-button>
@@ -86,6 +86,9 @@
       </el-card>
     </el-row>
     <el-row v-else></el-row>
+  </div>
+  <div v-else>
+    You must be Logged In to view My Messages
   </div>
 </template>
 

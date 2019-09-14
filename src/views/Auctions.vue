@@ -45,7 +45,7 @@
                 :min="this.starting_bid"
               ></el-input-number>
               <el-button
-                v-if="this.auction_obj.active"
+                v-if="this.auction_obj.active && this.global.loggedIn"
                 type="primary"
                 @click="makeNewBid"
                 enabled
@@ -54,7 +54,7 @@
             </el-form-item>
             <el-form-item label="Buy Now:" label-width="100px">
               <el-button
-                v-if="this.auction_obj.active"
+                v-if="this.auction_obj.active && this.global.loggedIn"
                 type="danger"
                 @click="buyOutNow"
                 enabled
