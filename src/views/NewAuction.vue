@@ -65,7 +65,7 @@
 
     <el-row>
       <el-col :offset="9">
-        <el-button v-if="this.global.userInfo.is_confirmed" type="primary" @click="handleNewAuction">Create Auction</el-button>
+        <el-button :disabled='!imageLoaded' v-if="this.global.userInfo.is_confirmed" type="primary" @click="handleNewAuction">Create Auction</el-button>
         <el-button v-else disabled type="primary" @click="handleNewAuction">Create Auction</el-button>
       </el-col>
     </el-row>
@@ -106,7 +106,8 @@ export default {
       ],
       value: [],
       imageData: "",
-      inputImage: ""
+      rawImage: "",
+      imageLoaded: false,
     };
   },
   mounted() {
@@ -114,6 +115,9 @@ export default {
     // console.log("Categories data:");
     // console.log(JSON.stringify(this.global.categories));
     this.fillUpOptions();
+  },
+  watch: {
+    imageData: 'imageDataLoaded'
   },
   methods: {
     updateBreadcrumb() {
@@ -152,7 +156,7 @@ export default {
       console.log(response.data);
 
       //
-      this.saveImage(this.inputImage, response.data.id)
+      this.uploadImageRaw(response.data.id)
       //
 
       console.log("categories: ");
@@ -176,33 +180,30 @@ export default {
       }
     },
     previewImage: function(event) {
-      // Reference to the DOM input element
       var input = event.target;
-      // Ensure that you have a file before attempting to read it
       if (input.files && input.files[0]) {
-        // create a new FileReader to read this image and convert to base64 format
         var reader = new FileReader();
-        // Define a callback function to run, when FileReader finishes its job
         reader.onload = e => {
-          // Note: arrow function used here, so that "this.imageData" refers to the imageData of Vue component
-          // Read image as base64 and set to imageData
           this.imageData = e.target.result;
         };
-        // Start the reader job - read file as a data url (base64 format)
         reader.readAsDataURL(input.files[0]);
-        //this.saveImage(input.files[0])
-        this.inputImage = input.files[0]
-
       }
     },
-    async saveImage(myFile, newName) {
-      var url = this.global.apiurl + "images/uploadImage/" + newName;
-      let data = new FormData();
-      //data.append('myFile', 'myFile');
-      data.append('myFile', myFile); 
+    async getImageRaw(id) {
+      var url = this.global.apiurl + "images/getImageRaw/" + id;
+      var response = await axios.get(url);
+      this.rawImage = response.data
+    },
+    imageDataLoaded(){
+      this.imageLoaded = true
+    },
+    async uploadImageRaw(newName) {
+      console.log('image loaded')
+      var url = this.global.apiurl + "images/uploadImageRaw/" + newName;
       var config = { headers: { "Content-Type": "application/json" } };
 
-      var response = await axios.post(url, data, config);
+      var response = await axios.post(url, { imageData: this.imageData }, config);
+      console.log(this.imageData.length)
       console.log(JSON.stringify(response.data));
     }
   }

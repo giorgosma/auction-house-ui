@@ -54,11 +54,8 @@
     <el-row>
       <el-col :span="4" v-for="(o, index) in auctionNumber" :key="o" :offset="index > 1 ? 1 : 1">
         <el-row v-if="auctions[index].visible">
-          <el-card :body-style="{ padding: '0px' }">
-            <img
-              src="https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png"
-              class="image"
-            />
+          <el-card :body-style="{ padding: '4px' }">
+            <img class="preview" :src="rawImage[index]"/>
             <div style="padding: 14px;">
               <div style="text-align: center;">
                 <span>{{ auctions[index].item.name }}</span>
@@ -74,8 +71,14 @@
                 <div v-if="auctions[index].buyout_price" style="text-align:left; padding:2px">
                   <span>BuyOut Price: {{ auctions[index].buyout_price }}</span>
                 </div>
+                <div v-else style="text-align:left; padding:2px">
+                  <span>No BuyOut Price</span>
+                </div>
                 <div v-if="auctions[index].highest_bid_id" style="text-align:left; padding:2px">
                   <span>Highest Bid: {{ auctions[index].bid.amount }}</span>
+                </div>
+                <div v-else style="text-align:left; padding:2px">
+                  <span>No Bids Yet</span>
                 </div>
                 <div style="text-align:center;">
                   <router-link :to="'/auctions/' + auctions[index].id">View Auction</router-link>
@@ -104,7 +107,8 @@ export default {
       select: "",
       input: "",
       max: null,
-      min: 0
+      min: 0,
+      rawImage: []
     };
   },
   watch: {
@@ -143,6 +147,7 @@ export default {
         }
       }
       this.global.auctions = this.auctions;
+      this.getImageRaw()
     },
     loadViaCategory() {
       console.log("Changed value!");
@@ -266,7 +271,28 @@ export default {
         }
       }
       this.global.auctions = this.auctions;
-    }
+      this.getImageRaw()
+    },
+    async getImageRaw() {
+      this.rawImage = [];
+      for (let i in this.auctions){
+        //console.log("Auction : " + this.auctions[i].id)
+        if (this.auctions[i].id < 40) {
+          //console.log("burger")
+          this.rawImage.push(
+            "https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png"
+          );
+        }
+        else {
+          //console.log("load")
+          var url = this.global.apiurl + "images/getImageRaw/" + this.auctions[i].id;
+          var response = await axios.get(url);
+          this.rawImage.push(
+           response.data);
+        }
+      }
+      //console.log("RawImage Lenth: " + this.rawImage.length)
+    },
   }
 };
 </script>
@@ -309,5 +335,20 @@ export default {
 }
 .input-with-select .el-input-group__prepend {
   background-color: #fff;
+}
+
+.image-preview {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  padding: 20px;
+}
+img.preview {
+  width: 200px;
+  height: 200px;
+  background-color: white;
+  border: 1px solid #ddd;
+  /* padding: 5px; */
+  display: block;
+  /* margin-left: auto;
+  margin-right: auto; */
 }
 </style>

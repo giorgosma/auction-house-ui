@@ -5,12 +5,13 @@
       {{ this.auction_obj.item.id }}
       {{ this.auction_obj.item.categories[0].name }}-->
       <el-card class="box-card">
-        <img
+        <img v-if="this.auction_obj.id < 40"
           width="250"
           height="350"
           src="https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png"
           class="image"
         />
+        <img v-else class="preview" :src="rawImage" />
         <el-col class="column">
           <h2 style="text-align:center;">{{ this.auction_obj.item.name }}</h2>
           <el-collapse>
@@ -117,7 +118,8 @@ export default {
       starting_bid: 0.0,
       newBid: 0,
 
-      activeNames: []
+      activeNames: [],
+      rawImage: "",
     };
   },
   watch: {
@@ -130,6 +132,7 @@ export default {
     this.updateData();
     this.updateBreadcrumb();
     this.loadAuction();
+    this.getImageRaw();
   },
   computed: {
     myAuction: function() {
@@ -277,6 +280,12 @@ export default {
       if (seconds < 10) {seconds = "0"+seconds;}
       return days+'d '+hours+'h '+minutes+'m';
     },
+
+    async getImageRaw() {
+      var url = this.global.apiurl + "images/getImageRaw/" + this.auction_id;
+      var response = await axios.get(url);
+      this.rawImage = response.data
+    },
   }
 };
 </script>
@@ -315,5 +324,20 @@ export default {
 
 .bg-white {
   background: #e0e0e0;
+}
+
+.file-upload-form,
+.image-preview {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  padding: 20px;
+}
+img.preview {
+  width: 200px;
+  background-color: white;
+  border: 1px solid #ddd;
+  padding: 5px;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
 }
 </style>
