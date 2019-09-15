@@ -1,14 +1,6 @@
 <template>
-  <!-- <div>About.vue here</div> -->
-  <div>
-    <img class="preview" :src="dataUrl">
-  </div>
-<!-- <form action="/uploadfile" enctype="multipart/form-data" method="POST"> 
-   <input type="file" name="myFile" />
-   <input type="submit" value="Upload a file"/>
-</form> -->
 
-  <!-- <div>
+  <div>
     <div class="file-upload-form">
       Upload an image file:
       <input type="file" name="myFile" @change="previewImage" accept="image/*" />
@@ -16,7 +8,12 @@
     <div class="image-preview" v-if="imageData.length > 0">
       <img class="preview" :src="imageData" />
     </div>
-  </div> -->
+    <p>imageData --{{imageData}}--</p>
+    <p>rawImage --{{rawImage}}--</p>
+    <el-button @click="uploadImageRaw" :disabled='!imageLoaded'>Upload</el-button>
+    <img v-if="rawImage != ''" class="preview" :src="rawImage">
+    
+  </div>
 </template>
 
 <script>
@@ -26,21 +23,17 @@ export default {
     return {
       global: this.$store.state,
       imageData: "",
-      thatImage: ""
+      rawImage: "",
+      imageLoaded: false,
     };
   },
   mounted() {
     this.updateBreadcrumb();
-    this.getImage(36)
+    this.getImageRaw(2)
   },
-  computed : {
-    dataUrl(){
-        return 'data:image/png;base64,' + btoa(
-            new Uint8Array(this.thatImage)
-            .reduce((data, byte) => data + String.fromCharCode(byte), '')
-        );
-    }
-},
+  watch: {
+    imageData: 'imageDataLoaded'
+  },
   methods: {
     updateBreadcrumb() {
       this.global.breadcrumbPath = [
@@ -49,40 +42,31 @@ export default {
       ];
     },
     previewImage: function(event) {
-      // Reference to the DOM input element
       var input = event.target;
-      // Ensure that you have a file before attempting to read it
       if (input.files && input.files[0]) {
-        // create a new FileReader to read this image and convert to base64 format
         var reader = new FileReader();
-        // Define a callback function to run, when FileReader finishes its job
         reader.onload = e => {
-          // Note: arrow function used here, so that "this.imageData" refers to the imageData of Vue component
-          // Read image as base64 and set to imageData
           this.imageData = e.target.result;
         };
-        // Start the reader job - read file as a data url (base64 format)
         reader.readAsDataURL(input.files[0]);
-        this.saveImage(input.files[0])
-        //this.getImage(1)
-
       }
     },
-    async saveImage(myFile) {
-      var url = this.global.apiurl + "images/uploadImage/1";
-      let data = new FormData();
-      //data.append('myFile', 'myFile');
-      data.append('myFile', myFile); 
+    async getImageRaw(id) {
+      var url = this.global.apiurl + "images/getImageRaw/" + id;
+      var response = await axios.get(url);
+      this.rawImage = response.data
+    },
+    imageDataLoaded(){
+      this.imageLoaded = true
+    },
+    async uploadImageRaw(){
+      console.log('image loaded')
+      var url = this.global.apiurl + "images/uploadImageRaw/2";
       var config = { headers: { "Content-Type": "application/json" } };
 
-      var response = await axios.post(url, data, config);
+      var response = await axios.post(url, { imageData: this.imageData }, config);
+      console.log(this.imageData.length)
       console.log(JSON.stringify(response.data));
-    },
-    async getImage(id) {
-      var url = this.global.apiurl + "images/getImage/" + id;
-
-      var response = await axios.get(url);
-      console.log(response.data);
     }
   }
 };
