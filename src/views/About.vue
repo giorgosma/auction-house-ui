@@ -1,14 +1,14 @@
 <template>
   <!-- <div>About.vue here</div> -->
-  <!-- <div>
-    <img class="preview" src="http://localhost:8080/images/earino19.png">
-  </div> -->
+  <div>
+    <img class="preview" :src="dataUrl">
+  </div>
 <!-- <form action="/uploadfile" enctype="multipart/form-data" method="POST"> 
    <input type="file" name="myFile" />
    <input type="submit" value="Upload a file"/>
 </form> -->
 
-  <div>
+  <!-- <div>
     <div class="file-upload-form">
       Upload an image file:
       <input type="file" name="myFile" @change="previewImage" accept="image/*" />
@@ -16,7 +16,7 @@
     <div class="image-preview" v-if="imageData.length > 0">
       <img class="preview" :src="imageData" />
     </div>
-  </div>
+  </div> -->
 </template>
 
 <script>
@@ -25,12 +25,22 @@ export default {
   data() {
     return {
       global: this.$store.state,
-      imageData: ""
+      imageData: "",
+      thatImage: ""
     };
   },
   mounted() {
     this.updateBreadcrumb();
+    this.getImage(36)
   },
+  computed : {
+    dataUrl(){
+        return 'data:image/png;base64,' + btoa(
+            new Uint8Array(this.thatImage)
+            .reduce((data, byte) => data + String.fromCharCode(byte), '')
+        );
+    }
+},
   methods: {
     updateBreadcrumb() {
       this.global.breadcrumbPath = [
@@ -53,19 +63,26 @@ export default {
         };
         // Start the reader job - read file as a data url (base64 format)
         reader.readAsDataURL(input.files[0]);
-        this.saveImage(event.target.files[0])
+        this.saveImage(input.files[0])
+        //this.getImage(1)
 
       }
     },
     async saveImage(myFile) {
-      var url = this.global.apiurl + "images/uploadImage";
+      var url = this.global.apiurl + "images/uploadImage/1";
       let data = new FormData();
-    data.append('myFile', 'myFile');
-    data.append('myFile', myFile); 
+      //data.append('myFile', 'myFile');
+      data.append('myFile', myFile); 
       var config = { headers: { "Content-Type": "application/json" } };
 
       var response = await axios.post(url, data, config);
       console.log(JSON.stringify(response.data));
+    },
+    async getImage(id) {
+      var url = this.global.apiurl + "images/getImage/" + id;
+
+      var response = await axios.get(url);
+      console.log(response.data);
     }
   }
 };
