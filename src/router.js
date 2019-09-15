@@ -9,6 +9,7 @@ import ConfirmUser from './views/ConfirmUser.vue'
 import Auctions from './views/Auctions.vue'
 import MyAuctions from './views/MyAuctions.vue'
 import MyMessages from './views/MyMessages.vue'
+import Recommended from './views/Recommended.vue'
 
 Vue.use(Router)
 
@@ -60,6 +61,11 @@ export default new Router({
       path: '/myMessages',
       name: 'myMessages',
       component: MyMessages
+    },
+    {
+      path: '/recommended',
+      name: 'recommended',
+      component: Recommended
     }
   ]
 })

@@ -50,6 +50,10 @@
           <i class="el-icon-setting"></i>
           <span>My Messages</span>
         </el-menu-item>
+        <el-menu-item v-if="this.global.loggedIn" index="/recommended">
+          <i class="el-icon-setting"></i>
+          <span>Recommended</span>
+        </el-menu-item>
       </el-menu>
     </el-aside>
   </div>
