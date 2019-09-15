@@ -51,6 +51,15 @@
             ></el-time-picker>
           </el-form-item>
         </el-form>
+        <div>
+          <div class="file-upload-form">
+            Upload an image file:
+            <input type="file" name="myFile" @change="previewImage" accept="image/*" />
+          </div>
+          <div class="image-preview" v-if="imageData.length > 0">
+            <img class="preview" :src="imageData" />
+          </div>
+        </div>
       </el-col>
     </el-row>
 
@@ -95,7 +104,9 @@ export default {
         //   label: null
         // },
       ],
-      value: []
+      value: [],
+      imageData: "",
+      inputImage: ""
     };
   },
   mounted() {
@@ -140,6 +151,10 @@ export default {
 
       console.log(response.data);
 
+      //
+      this.saveImage(this.inputImage, response.data.id)
+      //
+
       console.log("categories: ");
       for (let i in this.value) {
         console.log(this.value[i]);
@@ -159,10 +174,51 @@ export default {
           label: this.global.categories[i].name
         });
       }
+    },
+    previewImage: function(event) {
+      // Reference to the DOM input element
+      var input = event.target;
+      // Ensure that you have a file before attempting to read it
+      if (input.files && input.files[0]) {
+        // create a new FileReader to read this image and convert to base64 format
+        var reader = new FileReader();
+        // Define a callback function to run, when FileReader finishes its job
+        reader.onload = e => {
+          // Note: arrow function used here, so that "this.imageData" refers to the imageData of Vue component
+          // Read image as base64 and set to imageData
+          this.imageData = e.target.result;
+        };
+        // Start the reader job - read file as a data url (base64 format)
+        reader.readAsDataURL(input.files[0]);
+        //this.saveImage(input.files[0])
+        this.inputImage = input.files[0]
+
+      }
+    },
+    async saveImage(myFile, newName) {
+      var url = this.global.apiurl + "images/uploadImage/" + newName;
+      let data = new FormData();
+      //data.append('myFile', 'myFile');
+      data.append('myFile', myFile); 
+      var config = { headers: { "Content-Type": "application/json" } };
+
+      var response = await axios.post(url, data, config);
+      console.log(JSON.stringify(response.data));
     }
   }
 };
 </script>
 
 <style>
+.file-upload-form,
+.image-preview {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  padding: 20px;
+}
+img.preview {
+  width: 200px;
+  background-color: white;
+  border: 1px solid #ddd;
+  padding: 5px;
+}
 </style>
