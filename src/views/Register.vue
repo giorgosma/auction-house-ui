@@ -1,6 +1,11 @@
 <template>
   <div>
-    <el-row>
+    <el-row v-if="this.registeredUser">
+      <el-card class="box-card">
+        <p style="text-align:center;">You have been registered!</p>
+      </el-card>
+    </el-row>
+    <el-row v-else>
       <el-col class="column" :span="13">
         <el-form>
           <el-form-item label="Email" label-width="140px">
@@ -47,7 +52,7 @@
       </el-col>
     </el-row>
 
-    <el-row>
+    <el-row v-if="!this.registeredUser">
       <el-col :offset="10">
         <el-button type="primary" @click="handleNewRegistration">Confirm Registration</el-button>
       </el-col>
@@ -79,7 +84,8 @@ export default {
       userPassword: "",
 
       showWarning: false,
-      typedPassword: false
+      typedPassword: false,
+      registeredUser: false
     };
   },
   watch: {
@@ -126,6 +132,7 @@ export default {
       var response = await axios.post(url, body, config);
 
       console.log(response.data);
+      this.registeredUser = true;
     }
   }
 };

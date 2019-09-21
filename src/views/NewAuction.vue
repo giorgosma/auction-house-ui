@@ -1,6 +1,11 @@
 <template>
   <div v-if="this.global.loggedIn">
-    <el-row>
+    <el-row v-if="this.auctionCreated">
+      <el-card class="box-card">
+        <p style="text-align:center;">Your Auction has been created!</p>
+      </el-card>
+    </el-row>
+    <el-row v-else>
       <el-col class="column" :span="12">
         <el-form>
           <el-form-item label="Item Name" label-width="120px">
@@ -54,7 +59,12 @@
         <div>
           <div class="file-upload-form">
             Upload an image file:
-            <input type="file" name="myFile" @change="previewImage" accept="image/*" />
+            <input
+              type="file"
+              name="myFile"
+              @change="previewImage"
+              accept="image/*"
+            />
           </div>
           <div class="image-preview" v-if="imageData.length > 0">
             <img class="preview" :src="imageData" />
@@ -63,16 +73,19 @@
       </el-col>
     </el-row>
 
-    <el-row>
+    <el-row v-if="!this.auctionCreated">
       <el-col :offset="9">
-        <el-button :disabled='!imageLoaded' v-if="this.global.userInfo.is_confirmed" type="primary" @click="handleNewAuction">Create Auction</el-button>
+        <el-button
+          :disabled="!imageLoaded"
+          v-if="this.global.userInfo.is_confirmed"
+          type="primary"
+          @click="handleNewAuction"
+        >Create Auction</el-button>
         <el-button v-else disabled type="primary" @click="handleNewAuction">Create Auction</el-button>
       </el-col>
     </el-row>
   </div>
-  <div v-else>
-    You must be Logged In to make New Auctions
-  </div>
+  <div v-else>You must be Logged In to make New Auctions</div>
 </template>
 
 <script>
@@ -108,6 +121,8 @@ export default {
       imageData: "",
       rawImage: "",
       imageLoaded: false,
+
+      auctionCreated: false
     };
   },
   mounted() {
@@ -117,7 +132,7 @@ export default {
     this.fillUpOptions();
   },
   watch: {
-    imageData: 'imageDataLoaded'
+    imageData: "imageDataLoaded"
   },
   methods: {
     updateBreadcrumb() {
@@ -156,7 +171,7 @@ export default {
       console.log(response.data);
 
       //
-      this.uploadImageRaw(response.data.id)
+      this.uploadImageRaw(response.data.id);
       //
 
       console.log("categories: ");
@@ -170,6 +185,7 @@ export default {
 
         console.log(response.data);
       }
+      this.auctionCreated = true;
     },
     fillUpOptions() {
       for (let i in this.global.categories) {
@@ -192,18 +208,22 @@ export default {
     async getImageRaw(id) {
       var url = this.global.apiurl + "images/getImageRaw/" + id;
       var response = await axios.get(url);
-      this.rawImage = response.data
+      this.rawImage = response.data;
     },
-    imageDataLoaded(){
-      this.imageLoaded = true
+    imageDataLoaded() {
+      this.imageLoaded = true;
     },
     async uploadImageRaw(newName) {
-      console.log('image loaded')
+      console.log("image loaded");
       var url = this.global.apiurl + "images/uploadImageRaw/" + newName;
       var config = { headers: { "Content-Type": "application/json" } };
 
-      var response = await axios.post(url, { imageData: this.imageData }, config);
-      console.log(this.imageData.length)
+      var response = await axios.post(
+        url,
+        { imageData: this.imageData },
+        config
+      );
+      console.log(this.imageData.length);
       console.log(JSON.stringify(response.data));
     }
   }
@@ -221,5 +241,9 @@ img.preview {
   background-color: white;
   border: 1px solid #ddd;
   padding: 5px;
+}
+
+.box-card {
+  width: 480px;
 }
 </style>

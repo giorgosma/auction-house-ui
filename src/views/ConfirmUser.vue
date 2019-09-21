@@ -1,5 +1,5 @@
 <template>
-  <el-row v-if="this.global.loggedIn && this.global.userInfo.username == 'onouf123'">
+  <el-row v-if="this.global.loggedIn && this.global.userInfo.is_admin == '1'">
     <el-table
       ref="multipleTable"
       :data="tableData"

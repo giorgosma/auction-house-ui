@@ -30,11 +30,11 @@
           <i class="el-icon-menu"></i>
           <span>About</span>
         </el-menu-item>
-        <el-menu-item index="/register">
+        <el-menu-item v-if="!this.global.loggedIn" index="/register">
           <i class="el-icon-document"></i>
           <span>Register New User</span>
         </el-menu-item>
-        <el-menu-item v-if="this.global.loggedIn && this.global.userInfo.username == 'onouf123'" index="/confirmUser">
+        <el-menu-item v-if="this.global.loggedIn && this.global.userInfo.is_admin == '1'" index="/confirmUser">
           <i class="el-icon-setting"></i>
           <span>Confirm User</span>
         </el-menu-item>
