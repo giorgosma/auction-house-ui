@@ -2,68 +2,10 @@
   <div v-if="this.global.loggedIn && this.global.userInfo.is_confirmed == 0">
     <el-row>Your Confirmation is pending!</el-row>
   </div>
-  <div v-else-if="this.global.loggedIn && this.global.userInfo.id < 14">
+  <div v-else-if="this.global.loggedIn && this.global.userInfo.id < 8">
     <el-row>Your Are Not Included on Datashet!</el-row>
   </div>
   <div v-else>
-    <!-- <el-row>
-      <el-col :span="2">
-        <el-select v-model="select" placeholder="Select">
-          <el-option label="Category" value="Category"></el-option>
-          <el-option label="Price" value="Price"></el-option>
-          <el-option label="Text" value="Text"></el-option>
-          <el-option label="Country" value="Country"></el-option>
-        </el-select>
-      </el-col>
-      <el-col :span="6">
-        <div v-if="select == 'Price'" :span="16">
-          <el-row :span="6">
-            <el-input-number
-              placeholder="Please input min"
-              :precision="2"
-              :step="0.01"
-              :min="0"
-              v-model="min"
-              class="input-with-select"
-            ></el-input-number>
-          </el-row>
-          <el-row :span="6">
-            <el-input-number
-              placeholder="Please input max"
-              :precision="2"
-              :step="0.01"
-              :min="0"
-              v-model="max"
-              class="input-with-select"
-            ></el-input-number>
-          </el-row>
-          <el-button @click="searchViaPrice" slot="append" icon="el-icon-search"></el-button>
-        </div>
-        <div v-else>
-          <el-input placeholder="Please input" v-model="input" class="input-with-select">
-            <el-button @click="searchVia" slot="append" icon="el-icon-search"></el-button>
-          </el-input>
-        </div>
-      </el-col>
-    </el-row>
-    <el-row>
-      Choose Categories
-      <el-select
-        v-model="value"
-        multiple
-        filterable
-        allow-create
-        default-first-option
-        placeholder="Choose Item Categories"
-      >
-        <el-option
-          v-for="item in options"
-          :key="item.value"
-          :label="item.label"
-          :value="item.value"
-        ></el-option>
-      </el-select>
-    </el-row> -->
     <el-row>
       <el-col :span="4" v-for="(o, index) in auctionNumber" :key="o" :offset="index > 1 ? 1 : 1">
         <el-row v-if="auctions[index].visible">

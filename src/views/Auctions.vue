@@ -5,7 +5,7 @@
       {{ this.auction_obj.item.id }}
       {{ this.auction_obj.item.categories[0].name }}-->
       <el-card class="box-card">
-        <img v-if="this.auction_obj.id < 40"
+        <img v-if="this.auction_obj.id < 0"
           width="250"
           height="350"
           src="https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png"
@@ -64,7 +64,7 @@
             </el-form-item>
           </el-form>
         </el-col>
-        <el-col v-else class="column" style="background-color:#e0e0e0">
+        <el-col v-else-if="this.global.loggedIn" class="column" style="background-color:#e0e0e0">
           <el-collapse>
             <el-collapse-item title="Edit Starting Bid">
               <el-input-number
