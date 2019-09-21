@@ -132,19 +132,19 @@ export default {
       this.rawImage = [];
       for (let i in this.auctions){
         //console.log("Auction : " + this.auctions[i].id)
-        if (this.auctions[i].id < 40) {
-          //console.log("burger")
-          this.rawImage.push(
-            "https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png"
-          );
-        }
-        else {
+        // if (this.auctions[i].id < 40) {
+        //   //console.log("burger")
+        //   this.rawImage.push(
+        //     "https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png"
+        //   );
+        // }
+        // else {
           //console.log("load")
           var url = this.global.apiurl + "images/getImageRaw/" + this.auctions[i].id;
           var response = await axios.get(url);
           this.rawImage.push(
            response.data);
-        }
+        //}
       }
     }
   }

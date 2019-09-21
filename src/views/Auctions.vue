@@ -18,6 +18,11 @@
             <el-collapse-item title="Description">
               <div>{{this.auction_obj.item.description}}</div>
             </el-collapse-item>
+            <el-collapse-item title="Categories">
+              <li v-for="index in this.auction_obj.item.categories" :key="index.id">
+                {{index.name}}
+              </li>
+            </el-collapse-item>
           </el-collapse>
         </el-col>
         <el-col class="column" style="background-color:#daf1c3">
