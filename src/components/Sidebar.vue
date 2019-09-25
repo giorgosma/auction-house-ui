@@ -26,10 +26,10 @@
           <i class="el-icon-menu"></i>
           <span>Home</span>
         </el-menu-item>
-        <el-menu-item index="/about">
+        <!-- <el-menu-item index="/about">
           <i class="el-icon-menu"></i>
           <span>About</span>
-        </el-menu-item>
+        </el-menu-item> -->
         <el-menu-item v-if="!this.global.loggedIn" index="/register">
           <i class="el-icon-document"></i>
           <span>Register New User</span>

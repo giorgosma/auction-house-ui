@@ -52,36 +52,36 @@
       </el-select>
     </el-row>
     <el-row>
-      <el-col :span="4" v-for="(o, index) in auctionNumber" :key="o" :offset="index > 1 ? 1 : 1">
-        <el-row v-if="auctions[index].visible">
+      <el-col :span="4" v-for="(auction, index) in auctions" :key="index">
+        <el-row v-if="auction.visible">
           <el-card :body-style="{ padding: '4px' }">
             <img class="preview" :src="rawImage[index]"/>
             <div style="padding: 14px;">
               <div style="text-align: center;">
-                <span>{{ auctions[index].item.name }}</span>
+                <span>{{ auction.item.name }}</span>
               </div>
               <div class="bottom clearfix">
                 <div style="text-align:left; padding:2px" End Time>
                   End Time:
-                  <time class="time">{{ auctions[index].remaining }}</time>
+                  <time class="time">{{ auction.remaining }}</time>
                 </div>
                 <div style="text-align:left; padding:2px">
-                  <span>Starting Bid: {{ auctions[index].starting_bid }}</span>
+                  <span>Starting Bid: {{ auction.starting_bid }}</span>
                 </div>
-                <div v-if="auctions[index].buyout_price" style="text-align:left; padding:2px">
-                  <span>BuyOut Price: {{ auctions[index].buyout_price }}</span>
+                <div v-if="auction.buyout_price" style="text-align:left; padding:2px">
+                  <span>BuyOut Price: {{ auction.buyout_price }}</span>
                 </div>
                 <div v-else style="text-align:left; padding:2px">
                   <span>No BuyOut Price</span>
                 </div>
-                <div v-if="auctions[index].highest_bid_id" style="text-align:left; padding:2px">
-                  <span>Highest Bid: {{ auctions[index].bid.amount }}</span>
+                <div v-if="auction.highest_bid_id" style="text-align:left; padding:2px">
+                  <span>Highest Bid: {{ auction.bid.amount }}</span>
                 </div>
                 <div v-else style="text-align:left; padding:2px">
                   <span>No Bids Yet</span>
                 </div>
                 <div style="text-align:center;">
-                  <router-link :to="'/auctions/' + auctions[index].id">View Auction</router-link>
+                  <router-link :to="'/auctions/' + auction.id">View Auction</router-link>
                 </div>
               </div>
             </div>

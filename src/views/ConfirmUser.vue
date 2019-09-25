@@ -1,8 +1,23 @@
 <template>
   <el-row v-if="this.global.loggedIn && this.global.userInfo.is_admin == '1'">
+    <el-row>
+      <el-col :span='6'>
+        <el-checkbox v-model="getUnconfirmed">Get Unconfirmed Only</el-checkbox>
+      </el-col>
+      <el-col :span='6'>
+        <el-select v-model="pageSize" placeholder="Page Size" size="small">
+          <el-option
+            v-for="(item, index) in pageSizeOptions"
+            :key="index"
+            :label="item"
+            :value="item"
+          ></el-option>
+        </el-select>
+      </el-col>
+    </el-row>
     <el-table
       ref="multipleTable"
-      :data="tableData"
+      :data="tableData.filter((x) => {return !getUnconfirmed || !x.is_confirmed}).slice(pageStart, pageEnd)"
       style="width: 100%"
       @selection-change="handleSelectionChange"
     >
@@ -20,15 +35,26 @@
       </el-table-column>
       <el-table-column property="email" label="Email" show-overflow-tooltip></el-table-column>
       <el-table-column property="username" label="Username" show-overflow-tooltip></el-table-column>
-      <el-table-column property="password" label="Password" show-overflow-tooltip></el-table-column>
       <el-table-column property="first_name" label="First_Name" show-overflow-tooltip></el-table-column>
       <el-table-column property="last_name" label="Last_Name" show-overflow-tooltip></el-table-column>
-      <el-table-column property="rating" label="Rating" show-overflow-tooltip></el-table-column>
       <el-table-column property="city" label="City" show-overflow-tooltip></el-table-column>
       <el-table-column property="country" label="Country" show-overflow-tooltip></el-table-column>
       <el-table-column property="telephone" label="Telephone" show-overflow-tooltip></el-table-column>
       <el-table-column property="afm" label="AFM" show-overflow-tooltip></el-table-column>
     </el-table>
+    <el-row>
+      <el-col>
+        <el-pagination
+          small
+          background
+          layout="prev, pager, next"
+          :pager-count="11"
+          :page-count="parseInt(tableData.filter((x) => {return !getUnconfirmed || !x.is_confirmed}).length / pageSize)"
+          :current-page="pageIndex+1"
+          @current-change="changePage"
+        ></el-pagination>
+      </el-col>
+    </el-row>
     <div style="margin-top: 20px">
       <el-button @click="toggleSelection">Confirm Selected Users</el-button>
       <!-- <el-button @click="toggleSelection()">Clear selection</el-button> -->
@@ -47,8 +73,22 @@ export default {
       global: this.$store.state,
 
       tableData: [],
-      multipleSelection: []
+      multipleSelection: [],
+
+      pageSize: 10,
+      pageIndex: 0,
+
+      getUnconfirmed: false,
+      pageSizeOptions: [5, 10, 20, 30, 50, 100],
     };
+  },
+  computed: {
+    pageStart() {
+      return this.pageIndex * this.pageSize;
+    },
+    pageEnd() {
+      return this.pageIndex * this.pageSize + this.pageSize - 1;
+    }
   },
   mounted() {
     this.updateBreadcrumb();
@@ -87,7 +127,11 @@ export default {
     handleSelectionChange(val) {
       this.multipleSelection = val;
       console.log(JSON.stringify(val));
-    }
+    },
+    changePage(newPageIndex) {
+      if (newPageIndex - 1 == this.pageIndex) return;
+      this.pageIndex = newPageIndex - 1;
+    },
   }
 };
 </script>
